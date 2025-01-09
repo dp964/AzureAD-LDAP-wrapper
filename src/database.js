@@ -586,8 +586,14 @@ async function mergeAzureUserEntries(db) {
                         info: 'userPrincipalName overwritten'
                     });
             }
+            // 2025-01-09 dp964 - Added support for multiple domains. We assume usernames are unique across each domain. 
+            // If usernames are not unique then use customizer/customizer.js to fix those individual users?
 
             userPrincipalName = userPrincipalName.replace("@" + config.LDAP_DOMAIN, '');
+            userPrincipalName = userPrincipalName.replace("@" + config.LDAP_DOMAIN_SECOND, '');
+            userPrincipalName = userPrincipalName.replace("@" + config.LDAP_DOMAIN_THIRD, '');
+            userPrincipalName = userPrincipalName.replace("@" + config.LDAP_DOMAIN_FOURTH, '');
+
             let udn = config.LDAP_USERSDN;
             let ou = "";
 
