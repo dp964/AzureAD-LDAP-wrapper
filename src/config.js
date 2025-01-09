@@ -45,6 +45,10 @@ const allConfigs = {
     LDAP_PORT: { format: "Integer", required: true, default: 389, validate: "PORT" },
     LDAP_BINDUSER: { format: "String", required: true, default: null, validate: (val) => { return ((val || "").indexOf("|") > -1); } },
     LDAP_DOMAIN: { format: "String", required: true, default: "example.net", transform: nonWhiteSpaceLowerCase },
+    LDAP_DOMAIN_SECOND: { format: "String", required: true, default: "example.net", transform: nonWhiteSpaceLowerCase },
+    LDAP_DOMAIN_SECOND: { format: "String", required: true, default: "example.net", transform: nonWhiteSpaceLowerCase },
+    LDAP_DOMAIN_THIRD: { format: "String", required: true, default: "example.net", transform: nonWhiteSpaceLowerCase },
+    LDAP_DOMAIN_FOURTH: { format: "String", required: true, default: "example.net", transform: nonWhiteSpaceLowerCase },
     LDAP_BASEDN: { format: "String", required: true, default: () => "dc=" + config.LDAP_DOMAIN.split(".").join(",dc="), transform: nonWhiteSpaceLowerCase, validate: validateDN },
 
     //
