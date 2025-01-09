@@ -198,7 +198,8 @@ server.bind(SUFFIX, async (req, res, next) => {
                     helper.log("server.js", "server.bind", username, "check=true: you shall pass");
 
                     //helper.log("server.js", userAttributes);
-                    if (userAttributes && userAttributes.hasOwnPropertyCI("sambaNTPassword")) {
+                    
+                    if (userAttributes && userAttributes.hasOwnPropertyCI("sambaNTPassword") && !config.LDAP_SAMBA_DISABLEHASH ) {
 
                         if (userAttributes["sambaNTPassword"] != userNtHash) {
                             helper.log("server.js", "server.bind", username, "Saving NT password hash for user ", dn);
@@ -218,7 +219,7 @@ server.bind(SUFFIX, async (req, res, next) => {
                     res.end();
                     return next();
                 }
-                else if (check === 2 && config.LDAP_ALLOWCACHEDLOGINONFAILURE) {
+                else if (check === 2 && config.LDAP_ALLOWCACHEDLOGINONFAILURE && !config.LDAP_SAMBA_DISABLEHASH) {
                     helper.error("server.js", "server.bind", username, "wrong password, retry against sambaNTPassword");
                     if (userAttributes && userAttributes.hasOwnPropertyCI("sambaNTPassword")) {
                         if (userAttributes["sambaNTPassword"] === userNtHash) {
