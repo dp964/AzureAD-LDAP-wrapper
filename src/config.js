@@ -46,7 +46,6 @@ const allConfigs = {
     LDAP_BINDUSER: { format: "String", required: true, default: null, validate: (val) => { return ((val || "").indexOf("|") > -1); } },
     LDAP_DOMAIN: { format: "String", required: true, default: "example.net", transform: nonWhiteSpaceLowerCase },
     LDAP_DOMAIN_SECOND: { format: "String", required: true, default: "example.net", transform: nonWhiteSpaceLowerCase },
-    LDAP_DOMAIN_SECOND: { format: "String", required: true, default: "example.net", transform: nonWhiteSpaceLowerCase },
     LDAP_DOMAIN_THIRD: { format: "String", required: true, default: "example.net", transform: nonWhiteSpaceLowerCase },
     LDAP_DOMAIN_FOURTH: { format: "String", required: true, default: "example.net", transform: nonWhiteSpaceLowerCase },
     LDAP_BASEDN: { format: "String", required: true, default: () => "dc=" + config.LDAP_DOMAIN.split(".").join(",dc="), transform: nonWhiteSpaceLowerCase, validate: validateDN },
@@ -73,6 +72,7 @@ const allConfigs = {
     LDAP_SAMBASIDBASE: { format: "String", required: true, default: "S-1-5-21-2475342291-1480345137-508597502", transform: nonWhiteSpaceUpperCase },
     LDAP_SAMBA_USEAZURESID: { format: "Boolean", required: false, default: true },
     LDAP_SAMBANTPWD_MAXCACHETIME: { format: "Integer", required: false, default: -1 },
+    LDAP_SAMBA_DISABLEHASH: {format: "Boolean", required: false, default: false }
 
     // misc
     DSM7: { format: "Boolean", default: true },
