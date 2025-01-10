@@ -72,7 +72,7 @@ const allConfigs = {
     LDAP_SAMBASIDBASE: { format: "String", required: true, default: "S-1-5-21-2475342291-1480345137-508597502", transform: nonWhiteSpaceUpperCase },
     LDAP_SAMBA_USEAZURESID: { format: "Boolean", required: false, default: true },
     LDAP_SAMBANTPWD_MAXCACHETIME: { format: "Integer", required: false, default: -1 },
-    LDAP_SAMBA_DISABLEHASH: {format: "Boolean", required: false, default: false }
+    LDAP_SAMBA_DISABLEHASH: {format: "Boolean", required: false, default: false },
 
     // misc
     DSM7: { format: "Boolean", default: true },
