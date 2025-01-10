@@ -307,7 +307,6 @@ function mergeDnUserDefaultGroup(db) {
         "gidNumber": usersGroupDn_hash,
         "member": [],
         "memberUid": [],
-        "memberUPN": [],
         "sambaGroupType": 2,
         "sambaSID": generateSID(false, 0, config.LDAP_SAMBASIDBASE, usersGroupDn_hash),
         "structuralObjectClass": "posixGroup",
@@ -326,7 +325,6 @@ function mergeDnUserDefaultGroup(db) {
         "displayName": config.LDAP_USERSGROUPSBASEDN.replace("," + config.LDAP_GROUPSDN, '').replace('cn=', ""),
         "member": [],
         "memberUid": [],
-        "memberUPN": [],
         
         "sambaSID": generateSID(false, 0, config.LDAP_SAMBASIDBASE, usersGroupDn_hash),
         "entryCSN": helper.ldap_now() + ".000000Z#000000#000#000000",
@@ -453,7 +451,6 @@ async function mergeAzureGroupEntries(db) {
             "gidNumber": group_hash,
             "member": [],
             "memberUid": [],
-            "memberUPN": [],
             "sambaGroupType": 2,
             // "sambaSID": group.securityIdentifier,
             "sambaSID": generateSID(config.LDAP_SAMBA_USEAZURESID, 0, config.LDAP_SAMBASIDBASE, group_hash, group.securityIdentifier),
@@ -592,12 +589,12 @@ async function mergeAzureUserEntries(db) {
             }
             // 2025-01-09 dp964 - Added support for multiple domains. We assume usernames are unique across each domain. 
             // If usernames are not unique then use customizer/customizer.js to fix those individual users?
-
-            userPrincipalName = userPrincipalName.replace("@" + config.LDAP_DOMAIN, '');
+            
+/*            userPrincipalName = userPrincipalName.replace("@" + config.LDAP_DOMAIN, '');
             userPrincipalName = userPrincipalName.replace("@" + config.LDAP_DOMAIN_SECOND, '');
             userPrincipalName = userPrincipalName.replace("@" + config.LDAP_DOMAIN_THIRD, '');
             userPrincipalName = userPrincipalName.replace("@" + config.LDAP_DOMAIN_FOURTH, '');
-
+*/
             let udn = config.LDAP_USERSDN;
             let ou = "";
 
@@ -605,15 +602,16 @@ async function mergeAzureUserEntries(db) {
                 ou = "ou=" + config.LDAP_DOMAIN;
                 udn = ou + "," + config.LDAP_USERSDN;
             }
-
+            let upnSuffix="";
             if (userPrincipalName.indexOf("@") > -1) {
 
                 if (config.LDAP_DOMAIN_OU) {
                     ou = "ou=" + userPrincipalName.substring(userPrincipalName.indexOf("@") + 1);
                     udn = ou + "," + config.LDAP_USERSDN;
                 }
-
+                upnSuffix = userPrincipalName.substring(userPrincipalName.indexOf("@"));
                 userPrincipalName = userPrincipalName.substring(0, userPrincipalName.indexOf("@"));
+                
             }
 
             let userPrincipalNameClean = removeSpecialChars(userPrincipalName);
@@ -624,9 +622,12 @@ async function mergeAzureUserEntries(db) {
 
 
             userPrincipalName = helper.escapeLDAPspecialChars(userPrincipalName);
+            // Override Username logic
+            upnSuffix = helper.escapeLDAPspecialChars(upnSuffix);
+            
             let userPrincipalNameOU = [userPrincipalName, ou].filter(x => typeof x === 'string' && x.length > 0).join(",");
 
-            let upName = config.LDAP_USERRDN + "=" + userPrincipalName + "," + udn;
+            let upName = config.LDAP_USERRDN + "=" + userPrincipalName + upnSuffix + "," + udn;
             upName = upName.toLowerCase();
 
             renameEntryByUUID(db, user.id, upName);
