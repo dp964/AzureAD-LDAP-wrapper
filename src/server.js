@@ -317,7 +317,8 @@ server.search(SUFFIX, authorize, (req, res, next) => {
                             // dn name
                             dn: dn,
                             // original attributes, so the answer contains CamelCase again
-                            attributes: removeSensitiveAttributes(bindDN, dn, db[dn])
+                            attributes: removeSensitiveAttributes(bindDN, dn, db[dn]),                        
+                            paged:true
                         }
                     );
                 }
@@ -372,7 +373,8 @@ server.search(SUFFIX, authorize, (req, res, next) => {
                         // dn name
                         dn: key,
                         // original attributes, so the answer contains CamelCase again
-                        attributes: removeSensitiveAttributes(bindDN, key, db[key])
+                        attributes: removeSensitiveAttributes(bindDN, key, db[key]),
+                        paged:true
                     }
                 );
             }
